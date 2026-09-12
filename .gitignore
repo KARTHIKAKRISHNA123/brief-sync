@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ML training outputs
+results/
+checkpoints/
+saved_summarizer_model/
+
+# Model files
+*.safetensors
+*.pt
+*.pth
+*.bin
+
+# Experiment/cache files
+wandb/
+mlruns/
