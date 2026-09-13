@@ -7,19 +7,28 @@ from fastapi.templating import Jinja2Templates #UI
 from fastapi.responses import HTMLResponse #UI
 from fastapi.staticfiles import StaticFiles
 
-# Initialize FastAPI app
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(
     title="Brief-Sync",
     description="A text summarization application powered by HuggingFace T5 Transformers.",
     version="1.0.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Load Model and Tokenizer
-model = T5ForConditionalGeneration.from_pretrained("./saved_summary_model")
-tokenizer = T5Tokenizer.from_pretrained("./saved_summary_model")
+model = T5ForConditionalGeneration.from_pretrained("./saved_summarizer_model")
+tokenizer = T5Tokenizer.from_pretrained("./saved_summarizer_model")
 
 # Device
-if torch.backend.mps.is_available():
+if torch.backends.mps.is_available():
     device = torch.device("mps")
 elif torch.cuda.is_available():
     device = torch.device("cuda")

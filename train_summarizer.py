@@ -132,12 +132,12 @@ print("Eval metrics:", eval_metrics)
 # ---------------------------------------------------------------
 # 4. Save model in the layout the Summarizer-HF-style app.py expects
 # ---------------------------------------------------------------
-model.save_pretrained("./saved_summary_model")
-tokenizer.save_pretrained("./saved_summary_model")
+model.save_pretrained("./saved_summarizer_model")
+tokenizer.save_pretrained("./saved_summarizer_model")
 
 with open("training_results.txt", "w") as f:
     f.write("BriefSync fine-tuning results (t5-small, SAMSum, 800 train / 100 val, 3 epochs)\n")
     f.write(f"Train metrics: {train_result.metrics}\n")
     f.write(f"Eval metrics: {eval_metrics}\n")
 
-print("Saved model to ./saved_summary_model")
+print("Saved model to ./saved_summarizer_model")

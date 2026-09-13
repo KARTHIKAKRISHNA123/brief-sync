@@ -1,0 +1,7 @@
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+pydantic==2.13.5
+transformers==4.46.0
+sentencepiece==0.2.0
+jinja2==3.1.4
+# torch is installed separately in the Dockerfile from the CPU-only index

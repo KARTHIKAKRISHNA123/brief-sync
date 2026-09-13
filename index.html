@@ -1,553 +1,531 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Magical Text Summariser</title>
 
     <style>
-
-        /* =========================
+      /* =========================
            GLOBAL RESET
         ========================= */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            min-height: 100vh;
-            font-family: Georgia, "Times New Roman", serif;
+      body {
+        min-height: 100vh;
+        font-family: Georgia, "Times New Roman", serif;
 
-            background:
-                radial-gradient(circle at 20% 20%, rgba(91, 76, 180, 0.45), transparent 25%),
-                radial-gradient(circle at 80% 30%, rgba(37, 99, 235, 0.35), transparent 25%),
-                radial-gradient(circle at 50% 90%, rgba(245, 190, 70, 0.15), transparent 30%),
-                linear-gradient(135deg, #050b2e, #101957 45%, #050a25);
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(91, 76, 180, 0.45),
+            transparent 25%
+          ),
+          radial-gradient(
+            circle at 80% 30%,
+            rgba(37, 99, 235, 0.35),
+            transparent 25%
+          ),
+          radial-gradient(
+            circle at 50% 90%,
+            rgba(245, 190, 70, 0.15),
+            transparent 30%
+          ),
+          linear-gradient(135deg, #050b2e, #101957 45%, #050a25);
 
-            color: white;
+        color: white;
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-            padding: 40px 20px;
+        padding: 40px 20px;
 
-            overflow-x: hidden;
+        overflow-x: hidden;
 
-            position: relative;
-        }
+        position: relative;
+      }
 
-
-        /* =========================
+      /* =========================
            MAGIC STARS
         ========================= */
 
-        body::before {
-            content: "✦     ✧        ✦          ✧      ✦       ✧";
+      body::before {
+        content: "✦     ✧        ✦          ✧      ✦       ✧";
 
-            position: fixed;
+        position: fixed;
 
-            top: 8%;
-            left: 0;
+        top: 8%;
+        left: 0;
 
-            width: 100%;
+        width: 100%;
 
-            font-size: 24px;
+        font-size: 24px;
 
-            color: #fff6b7;
+        color: #fff6b7;
 
-            letter-spacing: 35px;
+        letter-spacing: 35px;
 
-            opacity: 0.75;
+        opacity: 0.75;
 
-            animation: sparkle 4s infinite ease-in-out;
+        animation: sparkle 4s infinite ease-in-out;
 
-            pointer-events: none;
+        pointer-events: none;
+      }
+
+      body::after {
+        content: "✧        ✦       ✧          ✦       ✧";
+
+        position: fixed;
+
+        bottom: 8%;
+        right: 0;
+
+        width: 100%;
+
+        text-align: right;
+
+        font-size: 20px;
+
+        color: #f9d976;
+
+        letter-spacing: 30px;
+
+        opacity: 0.6;
+
+        animation: sparkle 5s infinite ease-in-out reverse;
+
+        pointer-events: none;
+      }
+
+      @keyframes sparkle {
+        0%,
+        100% {
+          opacity: 0.35;
+          transform: scale(1);
         }
 
-
-        body::after {
-            content: "✧        ✦       ✧          ✦       ✧";
-
-            position: fixed;
-
-            bottom: 8%;
-            right: 0;
-
-            width: 100%;
-
-            text-align: right;
-
-            font-size: 20px;
-
-            color: #f9d976;
-
-            letter-spacing: 30px;
-
-            opacity: 0.6;
-
-            animation: sparkle 5s infinite ease-in-out reverse;
-
-            pointer-events: none;
+        50% {
+          opacity: 1;
+          transform: scale(1.08);
         }
+      }
 
-
-        @keyframes sparkle {
-
-            0%, 100% {
-                opacity: 0.35;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.08);
-            }
-        }
-
-
-        /* =========================
+      /* =========================
            MAIN CONTAINER
         ========================= */
 
-        .container {
+      .container {
+        width: min(950px, 100%);
 
-            width: min(950px, 100%);
+        position: relative;
 
-            position: relative;
+        padding: 50px;
 
-            padding: 50px;
+        border-radius: 35px;
 
-            border-radius: 35px;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.13),
+          rgba(255, 255, 255, 0.04)
+        );
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.13),
-                    rgba(255,255,255,0.04)
-                );
+        backdrop-filter: blur(18px);
 
-            backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
 
-            -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 215, 100, 0.35);
 
-            border: 1px solid rgba(255, 215, 100, 0.35);
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.55),
+          0 0 50px rgba(90, 70, 200, 0.25),
+          inset 0 0 30px rgba(255, 255, 255, 0.04);
 
-            box-shadow:
-                0 30px 80px rgba(0,0,0,0.55),
-                0 0 50px rgba(90, 70, 200, 0.25),
-                inset 0 0 30px rgba(255,255,255,0.04);
+        overflow: hidden;
 
-            overflow: hidden;
+        z-index: 2;
+      }
 
-            z-index: 2;
-        }
+      /* Golden magical border */
 
+      .container::before {
+        content: "";
 
-        /* Golden magical border */
+        position: absolute;
 
-        .container::before {
+        inset: 10px;
 
-            content: "";
+        border-radius: 27px;
 
-            position: absolute;
+        border: 1px solid rgba(255, 215, 100, 0.18);
 
-            inset: 10px;
+        pointer-events: none;
+      }
 
-            border-radius: 27px;
-
-            border: 1px solid rgba(255, 215, 100, 0.18);
-
-            pointer-events: none;
-        }
-
-
-        /* =========================
+      /* =========================
            HEADER
         ========================= */
 
-        h1 {
+      h1 {
+        text-align: center;
 
-            text-align: center;
+        font-size: clamp(42px, 7vw, 72px);
 
-            font-size: clamp(42px, 7vw, 72px);
+        font-weight: bold;
 
-            font-weight: bold;
+        letter-spacing: 2px;
 
-            letter-spacing: 2px;
+        margin-bottom: 8px;
 
-            margin-bottom: 8px;
+        color: #ffe9a6;
 
-            color: #ffe9a6;
+        text-shadow:
+          0 0 10px rgba(255, 222, 120, 0.6),
+          0 0 25px rgba(255, 200, 60, 0.35),
+          3px 3px 0 #6f4d11;
+      }
 
-            text-shadow:
-                0 0 10px rgba(255, 222, 120, 0.6),
-                0 0 25px rgba(255, 200, 60, 0.35),
-                3px 3px 0 #6f4d11;
+      .container > h3 {
+        text-align: center;
 
-        }
+        font-family: Arial, sans-serif;
 
+        font-size: 16px;
 
-        .container > h3 {
+        font-weight: 400;
 
-            text-align: center;
+        letter-spacing: 4px;
 
-            font-family: Arial, sans-serif;
+        text-transform: uppercase;
 
-            font-size: 16px;
+        color: #d8dcff;
 
-            font-weight: 400;
+        margin-bottom: 42px;
+      }
 
-            letter-spacing: 4px;
-
-            text-transform: uppercase;
-
-            color: #d8dcff;
-
-            margin-bottom: 42px;
-        }
-
-
-        /* =========================
+      /* =========================
            FORM
         ========================= */
 
-        form {
+      form {
+        display: flex;
 
-            display: flex;
+        flex-direction: column;
 
-            flex-direction: column;
+        gap: 20px;
+      }
 
-            gap: 20px;
-        }
+      textarea {
+        width: 100%;
 
+        min-height: 280px;
 
-        textarea {
+        resize: vertical;
 
-            width: 100%;
+        padding: 25px;
 
-            min-height: 280px;
+        border-radius: 22px;
 
-            resize: vertical;
+        border: 1px solid rgba(255, 215, 100, 0.35);
 
-            padding: 25px;
+        outline: none;
 
-            border-radius: 22px;
+        background: linear-gradient(
+          145deg,
+          rgba(5, 11, 46, 0.8),
+          rgba(15, 24, 70, 0.75)
+        );
 
-            border: 1px solid rgba(255, 215, 100, 0.35);
+        color: white;
 
-            outline: none;
+        font-family: Arial, sans-serif;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(5, 11, 46, 0.8),
-                    rgba(15, 24, 70, 0.75)
-                );
+        font-size: 16px;
 
-            color: white;
+        line-height: 1.7;
 
-            font-family: Arial, sans-serif;
+        box-shadow:
+          inset 0 0 25px rgba(0, 0, 0, 0.3),
+          0 10px 30px rgba(0, 0, 0, 0.25);
 
-            font-size: 16px;
+        transition: all 0.3s ease;
+      }
 
-            line-height: 1.7;
+      textarea::placeholder {
+        color: #aeb6dd;
 
-            box-shadow:
-                inset 0 0 25px rgba(0,0,0,0.3),
-                0 10px 30px rgba(0,0,0,0.25);
+        font-style: italic;
+      }
 
-            transition: all 0.3s ease;
-        }
+      textarea:focus {
+        border-color: #ffd86b;
 
+        box-shadow:
+          0 0 0 3px rgba(255, 216, 107, 0.12),
+          0 0 35px rgba(255, 216, 107, 0.18),
+          inset 0 0 25px rgba(0, 0, 0, 0.3);
+      }
 
-        textarea::placeholder {
-
-            color: #aeb6dd;
-
-            font-style: italic;
-        }
-
-
-        textarea:focus {
-
-            border-color: #ffd86b;
-
-            box-shadow:
-                0 0 0 3px rgba(255,216,107,0.12),
-                0 0 35px rgba(255,216,107,0.18),
-                inset 0 0 25px rgba(0,0,0,0.3);
-        }
-
-
-        /* =========================
+      /* =========================
            MAGIC BUTTON
         ========================= */
 
-        button {
+      button {
+        align-self: center;
 
-            align-self: center;
+        min-width: 230px;
 
-            min-width: 230px;
+        padding: 17px 35px;
 
-            padding: 17px 35px;
+        border: none;
 
-            border: none;
+        border-radius: 50px;
 
-            border-radius: 50px;
+        cursor: pointer;
 
-            cursor: pointer;
+        font-family: Georgia, "Times New Roman", serif;
 
-            font-family: Georgia, "Times New Roman", serif;
+        font-size: 18px;
 
-            font-size: 18px;
+        font-weight: bold;
 
-            font-weight: bold;
+        letter-spacing: 1px;
 
-            letter-spacing: 1px;
+        color: #332000;
 
-            color: #332000;
+        background: linear-gradient(135deg, #fff3a6, #ffd45c, #eebc35);
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #fff3a6,
-                    #ffd45c,
-                    #eebc35
-                );
+        box-shadow:
+          0 8px 20px rgba(0, 0, 0, 0.35),
+          0 0 25px rgba(255, 210, 80, 0.35);
 
-            box-shadow:
-                0 8px 20px rgba(0,0,0,0.35),
-                0 0 25px rgba(255,210,80,0.35);
+        position: relative;
 
-            position: relative;
+        overflow: hidden;
 
-            overflow: hidden;
+        transition: all 0.3s ease;
+      }
 
-            transition: all 0.3s ease;
-        }
+      button::before {
+        content: "✦";
 
+        position: absolute;
 
-        button::before {
+        left: 20px;
 
-            content: "✦";
+        top: 50%;
 
-            position: absolute;
+        transform: translateY(-50%);
 
-            left: 20px;
+        font-size: 15px;
+      }
 
-            top: 50%;
+      button::after {
+        content: "✦";
 
-            transform: translateY(-50%);
+        position: absolute;
 
-            font-size: 15px;
-        }
+        right: 20px;
 
+        top: 50%;
 
-        button::after {
+        transform: translateY(-50%);
 
-            content: "✦";
+        font-size: 15px;
+      }
 
-            position: absolute;
+      button:hover {
+        transform: translateY(-4px) scale(1.03);
 
-            right: 20px;
+        box-shadow:
+          0 12px 30px rgba(0, 0, 0, 0.4),
+          0 0 45px rgba(255, 215, 80, 0.65);
+      }
 
-            top: 50%;
+      button:active {
+        transform: translateY(0) scale(0.98);
+      }
 
-            transform: translateY(-50%);
-
-            font-size: 15px;
-        }
-
-
-        button:hover {
-
-            transform: translateY(-4px) scale(1.03);
-
-            box-shadow:
-                0 12px 30px rgba(0,0,0,0.4),
-                0 0 45px rgba(255,215,80,0.65);
-        }
-
-
-        button:active {
-
-            transform: translateY(0) scale(0.98);
-        }
-
-
-        /* =========================
+      /* =========================
            SUMMARY CARD
         ========================= */
 
-        .summary-output {
+      .summary-output {
+        margin-top: 40px;
 
-            margin-top: 40px;
+        padding: 30px;
 
-            padding: 30px;
+        min-height: 180px;
 
-            min-height: 180px;
+        border-radius: 25px;
 
-            border-radius: 25px;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.035)
+        );
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.10),
-                    rgba(255,255,255,0.035)
-                );
+        border: 1px solid rgba(255, 215, 100, 0.25);
 
-            border: 1px solid rgba(255,215,100,0.25);
+        box-shadow:
+          inset 0 0 25px rgba(255, 255, 255, 0.025),
+          0 15px 35px rgba(0, 0, 0, 0.25);
 
-            box-shadow:
-                inset 0 0 25px rgba(255,255,255,0.025),
-                0 15px 35px rgba(0,0,0,0.25);
+        position: relative;
+      }
 
-            position: relative;
-        }
+      /* Magical top line */
 
+      .summary-output::before {
+        content: "";
 
-        /* Magical top line */
+        position: absolute;
 
-        .summary-output::before {
+        top: 0;
 
-            content: "";
+        left: 15%;
 
-            position: absolute;
+        width: 70%;
 
-            top: 0;
+        height: 2px;
 
-            left: 15%;
+        background: linear-gradient(90deg, transparent, #ffd86b, transparent);
 
-            width: 70%;
+        box-shadow: 0 0 15px #ffd86b;
+      }
 
-            height: 2px;
+      #summary-heading {
+        font-size: 27px;
 
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    #ffd86b,
-                    transparent
-                );
+        text-align: center;
 
-            box-shadow: 0 0 15px #ffd86b;
-        }
+        margin-bottom: 20px;
 
+        color: #ffe49a;
 
-        #summary-heading {
+        text-shadow: 0 0 10px rgba(255, 215, 100, 0.35);
+      }
 
-            font-size: 27px;
+      #summary-text {
+        font-family: Arial, sans-serif;
 
-            text-align: center;
+        font-size: 16px;
 
-            margin-bottom: 20px;
+        line-height: 1.8;
 
-            color: #ffe49a;
+        color: #e3e6ff;
 
-            text-shadow:
-                0 0 10px rgba(255,215,100,0.35);
-        }
+        text-align: left;
+      }
 
-
-        #summary-text {
-
-            font-family: Arial, sans-serif;
-
-            font-size: 16px;
-
-            line-height: 1.8;
-
-            color: #e3e6ff;
-
-            text-align: left;
-        }
-
-
-        /* =========================
+      /* =========================
            RESPONSIVE DESIGN
         ========================= */
 
-        @media (max-width: 700px) {
-
-            body {
-                padding: 20px 12px;
-            }
-
-            .container {
-                padding: 30px 20px;
-                border-radius: 25px;
-            }
-
-            h1 {
-                font-size: 45px;
-            }
-
-            .container > h3 {
-                font-size: 12px;
-                letter-spacing: 2px;
-            }
-
-            textarea {
-                min-height: 220px;
-                padding: 18px;
-            }
-
-            button {
-                width: 100%;
-            }
-
-            .summary-output {
-                padding: 22px;
-            }
+      @media (max-width: 700px) {
+        body {
+          padding: 20px 12px;
         }
 
+        .container {
+          padding: 30px 20px;
+          border-radius: 25px;
+        }
+
+        h1 {
+          font-size: 45px;
+        }
+
+        .container > h3 {
+          font-size: 12px;
+          letter-spacing: 2px;
+        }
+
+        textarea {
+          min-height: 220px;
+          padding: 18px;
+        }
+
+        button {
+          width: 100%;
+        }
+
+        .summary-output {
+          padding: 22px;
+        }
+      }
     </style>
-</head>
+  </head>
 
-
-<body>
-
+  <body>
     <div class="container">
+      <h1>Brief-Sync</h1>
 
-        <h1>Brief-Sync</h1>
+      <h3>✦ Text Summariser Powered by HuggingFace Transformers ✦</h3>
 
-        <h3>✦ Text Summariser Powered by HuggingFace Transformers ✦</h3>
+      <form id="summarization-form">
+        <textarea
+          id="dialogue-input"
+          placeholder=" Enter your story, dialogue, article, or content here..."
+          required
+        ></textarea>
 
+        <button type="submit">Summarise</button>
+      </form>
 
-        <form id="summarization-form">
+      <div class="summary-output">
+        <h3 id="summary-heading">✦ Content Summary ✦</h3>
 
-            <textarea
-                id="dialogue-input"
-                placeholder=" Enter your story, dialogue, article, or content here..."
-                required
-            ></textarea>
-
-
-            <button type="submit">
-                Summarise
-            </button>
-
-        </form>
-
-
-        <div class="summary-output">
-
-            <h3 id="summary-heading">
-                ✦ Content Summary ✦
-            </h3>
-
-            <p id="summary-text">
-                Your magical summary will appear here...
-            </p>
-
-        </div>
-
+        <p id="summary-text">Your magical summary will appear here...</p>
+      </div>
     </div>
 
-</body>
+    <script>
+      document
+        .getElementById("summarization-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // Get references to elements
+          const dialogueInput = document.getElementById("dialogue-input");
+          const summaryText = document.getElementById("summary-text");
+          const submitButton = e.target.querySelector("button");
+
+          const dialogue = dialogueInput.value.trim();
+          if (!dialogue) return;
+
+          // Show processing message and disable button
+          summaryText.innerText = "Processing...";
+          submitButton.disabled = true;
+
+          try {
+            // Send dialogue to backend
+            const response = await fetch("http://127.0.0.1:8000/summarize/", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ dialogue }),
+            });
+
+            if (!response.ok) {
+              throw new Error(`Server error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            summaryText.innerText = data.summary || "No summary returned.";
+          } catch (err) {
+            // Show any error messages
+            summaryText.innerText = `Error: ${err.message}`;
+          } finally {
+            // Re-enable the button
+            submitButton.disabled = false;
+          }
+        });
+    </script>
+  </body>
 </html>
