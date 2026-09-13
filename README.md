@@ -13,7 +13,7 @@
 
 ## Screenshots
 
-> 📸 *Add a screenshot or GIF of a real summary run here (drop it in `docs/images/` and update the link below) — e.g. `![Summariser in action](docs/images/demo.png)`.*
+![Brief-Sync generating a summary of a real text input](docs/images/demo-bio-summary.png)
 
 ## Problem Statement
 
@@ -392,7 +392,24 @@ Not applicable — the API is currently open (no auth layer). Anyone who can rea
 
 ## Results
 
-> Add fine-tuning metrics here (ROUGE-1/2/L, training/validation loss) once available from the Colab run — none are hard-coded in this README to avoid stating unverified numbers.
+Fine-tuned for 10 epochs (2500 steps) on the SAMSum training split. Training loss and validation loss both decreased steadily and converged by the final epochs, with no sign of overfitting (validation loss tracks training loss closely throughout):
+
+![Training and validation loss across 10 epochs](docs/images/training-loss-curve.png)
+
+| Epoch | Training Loss | Validation Loss |
+|---|---|---|
+| 1 | 0.670051 | 0.509501 |
+| 2 | 0.416336 | 0.375229 |
+| 3 | 0.394731 | 0.362046 |
+| 4 | 0.382074 | 0.355475 |
+| 5 | 0.363275 | 0.352786 |
+| 6 | 0.376942 | 0.349974 |
+| 7 | 0.342354 | 0.348663 |
+| 8 | 0.344172 | 0.348199 |
+| 9 | 0.347648 | 0.347826 |
+| 10 | 0.346260 | 0.347546 |
+
+> ROUGE-1/2/L scores aren't computed yet — worth adding if this goes further (see Roadmap).
 
 ## Security Considerations
 
