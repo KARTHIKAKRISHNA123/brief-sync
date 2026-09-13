@@ -73,7 +73,7 @@ flowchart LR
   Templ -->|"HTML"| UI
 ```
 
-## 🧰 Technology Stack — Complete Breakdown
+## Technology Stack — Complete Breakdown
 
 | Technology | Version | Category | Purpose in Project | Why Chosen | Key Features Used |
 |---|---|---|---|---|---|
@@ -89,7 +89,7 @@ flowchart LR
 | Google Colab | — | Training environment | Where the T5 model was fine-tuned (see `BriefSync_Colab_Finetune.ipynb`) | Free GPU access for fine-tuning without local hardware | Notebook-based training loop, checkpoint export to `saved_summarizer_model/` |
 | pandas (training pipeline) | — | Data Processing | Reads `samsum-train/test/validation.csv` for fine-tuning | Standard for tabular dataset loading before tokenization | `read_csv`, dataframe → HF `Dataset` conversion (in `train_summarizer.py`) |
 
-> ℹ️ *Training-side dependencies (pandas, datasets, accelerate, etc.) are inferred from `train_summarizer.py` / the Colab notebook and aren't required at inference time, so they're intentionally left out of the deployment `requirements.txt`.*
+> *Training-side dependencies (pandas, datasets, accelerate, etc.) are inferred from `train_summarizer.py` / the Colab notebook and aren't required at inference time, so they're intentionally left out of the deployment `requirements.txt`.*
 
 ## Request Lifecycle
 
@@ -452,15 +452,34 @@ No automated tests currently exist. A minimal starting point would be `pytest` +
 | `AttributeError: module 'torch' has no attribute 'backend'` | Typo — PyTorch's device-check module is `torch.backends`, not `torch.backend` | Use `torch.backends.mps.is_available()` |
 | Browser shows `Error: Failed to fetch` | Missing CORS middleware — the browser's `OPTIONS` preflight gets `405` | Add `CORSMiddleware` to the FastAPI app before defining routes |
 | `uvicorn: Got unexpected extra argument (app)` | Extra space in `uvicorn app: app --reload` | Use `uvicorn app:app --reload` (no space around the colon) |
+| `'import' is not recognized...` / `Unable to initialize device PRN` when checking CUDA | Python code (`import torch`, `print(...)`) typed directly into Windows **CMD**, which isn't a Python interpreter | Run `python` first to drop into the `>>>` interactive shell, *then* run the `import torch` / `torch.cuda.is_available()` checks there. See *GPU/CUDA Check* below. |
 
-## Future Roadmap
+### GPU/CUDA Check
 
-- Wrap `summarize_dialogue()` in a try/except and return a clean `500`/`422` instead of a raw traceback
-- Add ROUGE evaluation metrics to the README once computed
-- Cap input length explicitly with a friendly error before tokenization
-- Restrict CORS to the real deployed frontend origin
-- Add basic rate-limiting if deployed publicly
-- Add `pytest` coverage for the API layer
+If `torch.cuda.is_available()` looks broken, it's usually not the GPU. Verify the hardware/driver layer first:
+
+```cmd
+nvidia-smi
+```
+
+This should report your GPU, VRAM, driver version, and supported CUDA version (e.g. an RTX 3050 with 6 GB VRAM, driver 581.95, CUDA 13.0) — if that comes back clean, the hardware is fine and the issue is almost always more mundane than a broken CUDA install.
+
+The most common trap: pasting Python code straight into `cmd.exe`. CMD doesn't understand `import` or any other Python syntax, so it fails with errors like `'import' is not recognized` or `Unable to initialize device PRN`. Python commands only work *inside* the Python interpreter:
+
+```cmd
+python
+```
+
+Once you see the `>>>` prompt, run:
+
+```python
+import torch
+print(torch.cuda.is_available())
+print(torch.version.cuda)
+print(torch.cuda.get_device_name(0))
+```
+
+**CMD ≠ Python** — the flow is always `CMD → python → >>> → Python code`, never Python code typed directly at the `C:\>` prompt. If `nvidia-smi` confirms the GPU/driver are fine but `torch.cuda.is_available()` still returns `False` from inside the `>>>` shell, the next thing to check is whether the installed PyTorch build is the CPU-only wheel rather than a CUDA-enabled one (reinstall with the correct `--index-url` for your CUDA version from [pytorch.org](https://pytorch.org/get-started/locally/)).
 
 ## Contributing
 
