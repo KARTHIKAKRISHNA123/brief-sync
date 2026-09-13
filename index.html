@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Magical Text Summariser</title>
+
+    <style>
+
+        /* =========================
+           GLOBAL RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Georgia, "Times New Roman", serif;
+
+            background:
+                radial-gradient(circle at 20% 20%, rgba(91, 76, 180, 0.45), transparent 25%),
+                radial-gradient(circle at 80% 30%, rgba(37, 99, 235, 0.35), transparent 25%),
+                radial-gradient(circle at 50% 90%, rgba(245, 190, 70, 0.15), transparent 30%),
+                linear-gradient(135deg, #050b2e, #101957 45%, #050a25);
+
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 40px 20px;
+
+            overflow-x: hidden;
+
+            position: relative;
+        }
+
+
+        /* =========================
+           MAGIC STARS
+        ========================= */
+
+        body::before {
+            content: "✦     ✧        ✦          ✧      ✦       ✧";
+
+            position: fixed;
+
+            top: 8%;
+            left: 0;
+
+            width: 100%;
+
+            font-size: 24px;
+
+            color: #fff6b7;
+
+            letter-spacing: 35px;
+
+            opacity: 0.75;
+
+            animation: sparkle 4s infinite ease-in-out;
+
+            pointer-events: none;
+        }
+
+
+        body::after {
+            content: "✧        ✦       ✧          ✦       ✧";
+
+            position: fixed;
+
+            bottom: 8%;
+            right: 0;
+
+            width: 100%;
+
+            text-align: right;
+
+            font-size: 20px;
+
+            color: #f9d976;
+
+            letter-spacing: 30px;
+
+            opacity: 0.6;
+
+            animation: sparkle 5s infinite ease-in-out reverse;
+
+            pointer-events: none;
+        }
+
+
+        @keyframes sparkle {
+
+            0%, 100% {
+                opacity: 0.35;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.08);
+            }
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+
+            width: min(950px, 100%);
+
+            position: relative;
+
+            padding: 50px;
+
+            border-radius: 35px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.13),
+                    rgba(255,255,255,0.04)
+                );
+
+            backdrop-filter: blur(18px);
+
+            -webkit-backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(255, 215, 100, 0.35);
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.55),
+                0 0 50px rgba(90, 70, 200, 0.25),
+                inset 0 0 30px rgba(255,255,255,0.04);
+
+            overflow: hidden;
+
+            z-index: 2;
+        }
+
+
+        /* Golden magical border */
+
+        .container::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 10px;
+
+            border-radius: 27px;
+
+            border: 1px solid rgba(255, 215, 100, 0.18);
+
+            pointer-events: none;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        h1 {
+
+            text-align: center;
+
+            font-size: clamp(42px, 7vw, 72px);
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 8px;
+
+            color: #ffe9a6;
+
+            text-shadow:
+                0 0 10px rgba(255, 222, 120, 0.6),
+                0 0 25px rgba(255, 200, 60, 0.35),
+                3px 3px 0 #6f4d11;
+
+        }
+
+
+        .container > h3 {
+
+            text-align: center;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 16px;
+
+            font-weight: 400;
+
+            letter-spacing: 4px;
+
+            text-transform: uppercase;
+
+            color: #d8dcff;
+
+            margin-bottom: 42px;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        form {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 20px;
+        }
+
+
+        textarea {
+
+            width: 100%;
+
+            min-height: 280px;
+
+            resize: vertical;
+
+            padding: 25px;
+
+            border-radius: 22px;
+
+            border: 1px solid rgba(255, 215, 100, 0.35);
+
+            outline: none;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(5, 11, 46, 0.8),
+                    rgba(15, 24, 70, 0.75)
+                );
+
+            color: white;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+            box-shadow:
+                inset 0 0 25px rgba(0,0,0,0.3),
+                0 10px 30px rgba(0,0,0,0.25);
+
+            transition: all 0.3s ease;
+        }
+
+
+        textarea::placeholder {
+
+            color: #aeb6dd;
+
+            font-style: italic;
+        }
+
+
+        textarea:focus {
+
+            border-color: #ffd86b;
+
+            box-shadow:
+                0 0 0 3px rgba(255,216,107,0.12),
+                0 0 35px rgba(255,216,107,0.18),
+                inset 0 0 25px rgba(0,0,0,0.3);
+        }
+
+
+        /* =========================
+           MAGIC BUTTON
+        ========================= */
+
+        button {
+
+            align-self: center;
+
+            min-width: 230px;
+
+            padding: 17px 35px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            cursor: pointer;
+
+            font-family: Georgia, "Times New Roman", serif;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            color: #332000;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff3a6,
+                    #ffd45c,
+                    #eebc35
+                );
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.35),
+                0 0 25px rgba(255,210,80,0.35);
+
+            position: relative;
+
+            overflow: hidden;
+
+            transition: all 0.3s ease;
+        }
+
+
+        button::before {
+
+            content: "✦";
+
+            position: absolute;
+
+            left: 20px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 15px;
+        }
+
+
+        button::after {
+
+            content: "✦";
+
+            position: absolute;
+
+            right: 20px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 15px;
+        }
+
+
+        button:hover {
+
+            transform: translateY(-4px) scale(1.03);
+
+            box-shadow:
+                0 12px 30px rgba(0,0,0,0.4),
+                0 0 45px rgba(255,215,80,0.65);
+        }
+
+
+        button:active {
+
+            transform: translateY(0) scale(0.98);
+        }
+
+
+        /* =========================
+           SUMMARY CARD
+        ========================= */
+
+        .summary-output {
+
+            margin-top: 40px;
+
+            padding: 30px;
+
+            min-height: 180px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.10),
+                    rgba(255,255,255,0.035)
+                );
+
+            border: 1px solid rgba(255,215,100,0.25);
+
+            box-shadow:
+                inset 0 0 25px rgba(255,255,255,0.025),
+                0 15px 35px rgba(0,0,0,0.25);
+
+            position: relative;
+        }
+
+
+        /* Magical top line */
+
+        .summary-output::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 15%;
+
+            width: 70%;
+
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #ffd86b,
+                    transparent
+                );
+
+            box-shadow: 0 0 15px #ffd86b;
+        }
+
+
+        #summary-heading {
+
+            font-size: 27px;
+
+            text-align: center;
+
+            margin-bottom: 20px;
+
+            color: #ffe49a;
+
+            text-shadow:
+                0 0 10px rgba(255,215,100,0.35);
+        }
+
+
+        #summary-text {
+
+            font-family: Arial, sans-serif;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+
+            color: #e3e6ff;
+
+            text-align: left;
+        }
+
+
+        /* =========================
+           RESPONSIVE DESIGN
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            .container {
+                padding: 30px 20px;
+                border-radius: 25px;
+            }
+
+            h1 {
+                font-size: 45px;
+            }
+
+            .container > h3 {
+                font-size: 12px;
+                letter-spacing: 2px;
+            }
+
+            textarea {
+                min-height: 220px;
+                padding: 18px;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .summary-output {
+                padding: 22px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <h1>Brief-Sync</h1>
+
+        <h3>✦ Text Summariser Powered by HuggingFace Transformers ✦</h3>
+
+
+        <form id="summarization-form">
+
+            <textarea
+                id="dialogue-input"
+                placeholder=" Enter your story, dialogue, article, or content here..."
+                required
+            ></textarea>
+
+
+            <button type="submit">
+                Summarise
+            </button>
+
+        </form>
+
+
+        <div class="summary-output">
+
+            <h3 id="summary-heading">
+                ✦ Content Summary ✦
+            </h3>
+
+            <p id="summary-text">
+                Your magical summary will appear here...
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
